@@ -6,7 +6,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'exception_handler.dart';
 
 String baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
-String accessToken = dotenv.env['MAPBOX_ACCESS_TOKEN']!;
+String accessToken = dotenv.env['PUBLIC_ACCESS_TOKEN']!;
 
 Dio _dio = Dio();
 

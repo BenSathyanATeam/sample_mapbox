@@ -6,18 +6,17 @@ import '../main.dart';
 import 'exception_handler.dart';
 
 String baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
-String accessToken = dotenv.env['MAPBOX_ACCESS_TOKEN']!;
+String accessToken = dotenv.env['PUBLIC_ACCESS_TOKEN']!;
 String searchType = 'place%2Cpostcode%2Caddress';
-String searchResultsLimit = '5';
+String searchResultsLimit = '10';
 String proximity =
     '${sharedPreferences.getDouble('longitude')}%2C${sharedPreferences.getDouble('latitude')}';
-String country = 'us';
 
 Dio _dio = Dio();
 
 Future getSearchResultsFromQueryUsingMapbox(String query) async {
   String url =
-      '$baseUrl/$query.json?country=$country&limit=$searchResultsLimit&proximity=$proximity&types=$searchType&access_token=$accessToken';
+      '$baseUrl/$query.json?limit=$searchResultsLimit&proximity=$proximity&types=$searchType&access_token=$accessToken';
   url = Uri.parse(url).toString();
   print(url);
   try {

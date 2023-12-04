@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mapbox/ui/prepare_ride.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import '../utils/mapbox_handler.dart';
 import '../utils/shared_prefs.dart';
 import '../widgets/location_search_text_field.dart';
 
@@ -14,6 +16,7 @@ class MapBoxMap extends StatefulWidget {
 class _MapBoxMapState extends State<MapBoxMap> {
   /// Mapbox related
   LatLng latLng = getCurrentLatLngFromSharedPrefs();
+  String title = 'Loading..';
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
 
@@ -30,6 +33,10 @@ class _MapBoxMapState extends State<MapBoxMap> {
 
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
+    var response = await getParsedReverseGeocoding(latLng);
+    setState(() {
+      title = response['place'];
+    });
   }
 
   _onStyleLoadedCallback() async {
@@ -44,15 +51,9 @@ class _MapBoxMapState extends State<MapBoxMap> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController searchController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        title:  Row(
-          children: [
-            const Text('Where to',style: TextStyle(fontSize: 18),),
-            LocationField(textEditingController: searchController),
-          ],
-        ),
+        title: Text(title,style: const TextStyle(fontSize: 14),),
       ),
       body: SafeArea(
         child: Stack(
@@ -60,15 +61,34 @@ class _MapBoxMapState extends State<MapBoxMap> {
             MapboxMap(
               accessToken: dotenv.env['PUBLIC_ACCESS_TOKEN'],
               initialCameraPosition: _initialCameraPosition,
+              onStyleLoadedCallback: _onStyleLoadedCallback,
+              onMapCreated: _onMapCreated,
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          controller.animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
-        },
-        child: const Icon(Icons.my_location),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left:28.0,right: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.black,
+              heroTag: "1",
+              onPressed: () {
+                controller.animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
+              },
+              child: const Icon(Icons.my_location,color: Colors.white,),
+            ),FloatingActionButton(
+              backgroundColor: Colors.black,
+              heroTag: "2",
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const PrepareRide()));
+              },
+              child: const Icon(Icons.directions,color: Colors.white,),
+            ),
+          ],
+        ),
       ),
     );
   }
