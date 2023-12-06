@@ -18,7 +18,6 @@ Future getSearchResultsFromQueryUsingMapbox(String query) async {
   String url =
       '$baseUrl/$query.json?limit=$searchResultsLimit&proximity=$proximity&types=$searchType&access_token=$accessToken';
   url = Uri.parse(url).toString();
-  print(url);
   try {
     _dio.options.contentType = Headers.jsonContentType;
     final responseData = await _dio.get(url);
