@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:mapbox/main.dart';
 import 'package:mapbox/ui/prepare_ride.dart';
@@ -22,7 +23,13 @@ class _SplashState extends State<Splash> {
   void initializeLocationAndSave() async{
     /// Ensure all permissions are collected for Locations
     Location location = Location();
-    bool serviceEnabled =  await location.serviceEnabled();
+    bool serviceEnabled = true;
+    try {
+      serviceEnabled = await location.serviceEnabled();
+    }on PlatformException catch(e){
+      debugPrint(e.toString());
+      serviceEnabled = await location.requestService();
+    }
     PermissionStatus permissionStatus;
     if(!serviceEnabled){
       serviceEnabled = await location.requestService();
