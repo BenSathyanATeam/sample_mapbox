@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 import '../network/mapbox_request.dart';
@@ -24,8 +23,6 @@ Future<List> getParsedResponseForQuery(String value) async {
 
   List features = response['features'];
   for (var feature in features) {
-    print("=========== PLACE ============");
-    print(feature['text']);
 
     Map response = {
       'name': feature['text'],
