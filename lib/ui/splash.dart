@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mapbox/main.dart';
-import 'package:mapbox/ui/map_box_map.dart';
+import 'package:mapbox/ui/prepare_ride.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -37,12 +38,14 @@ class _SplashState extends State<Splash> {
     /// Store the user location in sharedPreferences
     sharedPreferences.setDouble("latitude", currentLatLng.latitude);
     sharedPreferences.setDouble("longitude", currentLatLng.longitude);
+    sharedPreferences.setDouble("longitude", currentLatLng.longitude);
+    sharedPreferences.setDouble("longitude", currentLatLng.longitude);
     /// Get and store the directions API response in sharedPreferences
     Future.delayed(
         const Duration(seconds: 0),
             () => Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => const MapBoxMap()),
+            MaterialPageRoute(builder: (_) => const PrepareRide()),
                 (route) => false));
   }
 

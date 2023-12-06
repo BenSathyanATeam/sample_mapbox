@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mapbox/ui/prepare_ride.dart';
@@ -93,3 +94,4 @@ class _MapBoxMapState extends State<MapBoxMap> {
     );
   }
 }
+*/

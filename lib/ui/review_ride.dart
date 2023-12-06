@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mapbox/ui/turn_by_turn.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../utils/drop_off_time.dart';
-import '../utils/mapbox_handler.dart';
 import '../utils/shared_prefs.dart';
 import '../widgets/review_ride_bottom_sheet.dart';
 
@@ -19,7 +18,7 @@ class _ReviewRideState extends State<ReviewRide> {
   // Mapbox Maps SDK related
   final List<CameraPosition> _kTripEndPoints = [];
   late MapboxMapController controller;
-  late CameraPosition _initialCameraPosition;
+  //late CameraPosition _initialCameraPosition;
 
   // Directions API response related
   late String distance;
@@ -32,7 +31,7 @@ class _ReviewRideState extends State<ReviewRide> {
     _initialiseDirectionsResponse();
 
     // initialise initialCameraPosition, address and trip end points
-    _initialCameraPosition = CameraPosition(target: getCenterCoordinatesForPolyline(geometry), zoom: 11);
+//    _initialCameraPosition = CameraPosition(target: getCenterCoordinatesForPolyline(geometry), zoom: 11);
 
     for (String type in ['source', 'destination']) {
       _kTripEndPoints.add(CameraPosition(target: getTripLatLngFromSharedPrefs(type)));
@@ -46,7 +45,7 @@ class _ReviewRideState extends State<ReviewRide> {
     geometry = widget.modifiedResponse['geometry'];
   }
 
-  _onMapCreated(MapboxMapController controller) async {
+ /* _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
 
@@ -62,9 +61,9 @@ class _ReviewRideState extends State<ReviewRide> {
       );
     }
     _addSourceAndLineLayer();
-  }
+  }*/
 
-  _addSourceAndLineLayer() async {
+  /*_addSourceAndLineLayer() async {
     // Create a polyLine between source and destination
     final _fills = {
       "type": "FeatureCollection",
@@ -90,7 +89,7 @@ class _ReviewRideState extends State<ReviewRide> {
         lineWidth: 3,
       ),
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +105,7 @@ class _ReviewRideState extends State<ReviewRide> {
       body: SafeArea(
         child: Stack(
           children: [
-            SizedBox(
+     /* SizedBox(
               height: MediaQuery.of(context).size.height,
               child: MapboxMap(
                 accessToken: dotenv.env['PUBLIC_ACCESS_TOKEN'],
@@ -115,8 +114,11 @@ class _ReviewRideState extends State<ReviewRide> {
                 onStyleLoadedCallback: _onStyleLoadedCallback,
                 myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
               ),
-            ),
-            reviewRideBottomSheet(context, distance, dropOffTime),
+            ),*/
+            GestureDetector(onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> const TurnByTurn()));
+
+            },child: reviewRideBottomSheet(context, distance, dropOffTime)),
           ],
         ),
       ),

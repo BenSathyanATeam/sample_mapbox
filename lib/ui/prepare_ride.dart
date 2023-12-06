@@ -64,10 +64,10 @@ class _PrepareRideState extends State<PrepareRide> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+       /* leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back)),
-        title: const Text('Mapbox Cabs'),
+            icon: const Icon(Icons.arrow_back)),*/
+        title: const Text('Cabs'),
         actions: const [
           CircleAvatar(backgroundImage: AssetImage('assets/splash_icon.png'),backgroundColor: Colors.white,),
         ],

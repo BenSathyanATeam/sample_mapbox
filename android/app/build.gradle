@@ -70,11 +70,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.mapbox.maps:android:10.2.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'androidx.multidex:multidex:2.0.1'
-
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation ('com.mapbox.mapboxsdk:mapbox-android-sdk:8.4.0@aar'){
+        transitive=true
+    }
 }
 configurations {
     all*.exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
+    all*.exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-core'
 }
