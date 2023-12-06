@@ -37,7 +37,7 @@ import '../utils/shared_prefs.dart';
         mode: MapBoxNavigationMode.drivingWithTraffic,
         isOptimized: true,
         units: VoiceUnits.metric,
-        simulateRoute: true,
+        simulateRoute: false,
         language: "en");
 
     // Configure waypoints
