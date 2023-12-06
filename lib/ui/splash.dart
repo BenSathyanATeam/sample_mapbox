@@ -38,8 +38,6 @@ class _SplashState extends State<Splash> {
     /// Store the user location in sharedPreferences
     sharedPreferences.setDouble("latitude", currentLatLng.latitude);
     sharedPreferences.setDouble("longitude", currentLatLng.longitude);
-    sharedPreferences.setDouble("longitude", currentLatLng.longitude);
-    sharedPreferences.setDouble("longitude", currentLatLng.longitude);
     /// Get and store the directions API response in sharedPreferences
     Future.delayed(
         const Duration(seconds: 0),
