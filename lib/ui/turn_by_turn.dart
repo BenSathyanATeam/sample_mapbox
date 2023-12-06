@@ -1,19 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/flutter_mapbox_navigation.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../utils/shared_prefs.dart';
 
-class TurnByTurn extends StatefulWidget {
-  const TurnByTurn({Key? key}) : super(key: key);
+ class TurnByTurn  {
 
-  @override
-  State<TurnByTurn> createState() => _TurnByTurnState();
-}
-
-class _TurnByTurnState extends State<TurnByTurn> {
   // Waypoints to mark trip start and end
-  LatLng source = getTripLatLngFromSharedPrefs('source');
-  LatLng destination = getTripLatLngFromSharedPrefs('destination');
+  LatLng? source;
+  LatLng? destination;
   late WayPoint sourceWaypoint, destinationWaypoint;
   var wayPoints = <WayPoint>[];
 
@@ -28,15 +21,10 @@ class _TurnByTurnState extends State<TurnByTurn> {
   bool routeBuilt = false;
   bool isNavigating = false;
 
-  @override
-  void initState() {
-    super.initState();
-    initialize();
-  }
 
   Future<void> initialize() async {
-    if (!mounted) return;
-
+    LatLng? source = getTripLatLngFromSharedPrefs('source');
+    LatLng? destination = getTripLatLngFromSharedPrefs('destination');
     // Setup directions and options
     directions = MapBoxNavigation();
     directions.registerRouteEventListener((value) {
@@ -53,34 +41,15 @@ class _TurnByTurnState extends State<TurnByTurn> {
         language: "en");
 
     // Configure waypoints
-    sourceWaypoint = WayPoint(
-        name: "Source", latitude: source.latitude, longitude: source.longitude);
-    destinationWaypoint = WayPoint(
-        name: "Destination",
-        latitude: destination.latitude,
-        longitude: destination.longitude);
+    sourceWaypoint = WayPoint(name: "Source", latitude: source.latitude, longitude: source.longitude);
+    destinationWaypoint =
+        WayPoint(name: "Destination", latitude: destination.latitude, longitude: destination.longitude);
     wayPoints.add(sourceWaypoint);
     wayPoints.add(destinationWaypoint);
 
     // Start the trip
     await directions.startNavigation(wayPoints: wayPoints, options: _options);
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(   appBar: AppBar(
-      leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back)),
-      title: const Text('Cabs'),
-      actions: const [
-        CircleAvatar(backgroundImage: AssetImage('assets/splash_icon.png'),backgroundColor: Colors.white,),
-      ],
-    ),body:  Scaffold(body: GestureDetector(onTap:(){
-      Navigator.pop(context);
-    },child: const Center(child: Text("Start Again"))),),);
-  }
-
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.getDistanceRemaining();
     durationRemaining = await directions.getDurationRemaining();
@@ -103,6 +72,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
       case MapBoxEvent.navigation_running:
         isNavigating = true;
         break;
+      case MapBoxEvent.route_build_no_routes_found:
       case MapBoxEvent.on_arrival:
         arrived = true;
         if (!isMultipleStop) {
@@ -119,6 +89,5 @@ class _TurnByTurnState extends State<TurnByTurn> {
         break;
     }
     //refresh UI
-    setState(() {});
   }
 }
