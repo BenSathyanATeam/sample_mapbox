@@ -4,6 +4,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import '../utils/drop_off_time.dart';
 import '../utils/shared_prefs.dart';
 import '../widgets/review_ride_bottom_sheet.dart';
+import 'map_view.dart';
 
 class ReviewRide extends StatefulWidget {
   final Map modifiedResponse;
@@ -18,8 +19,7 @@ class _ReviewRideState extends State<ReviewRide> {
   // Mapbox Maps SDK related
   final List<CameraPosition> _kTripEndPoints = [];
   late MapboxMapController controller;
-  //late CameraPosition _initialCameraPosition;
-
+  TurnByTurn turnByTurn = TurnByTurn();
   // Directions API response related
   late String distance;
   late String dropOffTime;
@@ -44,53 +44,6 @@ class _ReviewRideState extends State<ReviewRide> {
     dropOffTime = getDropOffTime(widget.modifiedResponse['duration']);
     geometry = widget.modifiedResponse['geometry'];
   }
-
- /* _onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
-  }
-
-  _onStyleLoadedCallback() async {
-    for (int i = 0; i < _kTripEndPoints.length; i++) {
-      String iconImage = i == 0 ? 'circle' : 'square';
-      await controller.addSymbol(
-        SymbolOptions(
-          geometry: _kTripEndPoints[i].target,
-          iconSize: 0.1,
-          iconImage: "assets/$iconImage.png",
-        ),
-      );
-    }
-    _addSourceAndLineLayer();
-  }*/
-
-  /*_addSourceAndLineLayer() async {
-    // Create a polyLine between source and destination
-    final _fills = {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "id": 0,
-          "properties": <String, dynamic>{},
-          "geometry": geometry,
-        },
-      ],
-    };
-
-    // Add new source and lineLayer
-    await controller.addSource("fills", GeojsonSourceProperties(data: _fills));
-    await controller.addLineLayer(
-      "fills",
-      "lines",
-      LineLayerProperties(
-        lineColor: Colors.black.toHexStringRGB(),
-        lineCap: "round",
-        lineJoin: "round",
-        lineWidth: 3,
-      ),
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,20 +58,17 @@ class _ReviewRideState extends State<ReviewRide> {
       body: SafeArea(
         child: Stack(
           children: [
-     /* SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: MapboxMap(
-                accessToken: dotenv.env['PUBLIC_ACCESS_TOKEN'],
-                initialCameraPosition: _initialCameraPosition,
-                onMapCreated: _onMapCreated,
-                onStyleLoadedCallback: _onStyleLoadedCallback,
-                myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-              ),
-            ),*/
-            GestureDetector(onTap:(){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> const TurnByTurn()));
+            const MapViewScreen(),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: GestureDetector(onTap:(){
+                  turnByTurn.initialize();
+                  //Navigator.push(context, MaterialPageRoute(builder: (context)=> const TurnByTurn()));
 
-            },child: reviewRideBottomSheet(context, distance, dropOffTime)),
+                },child: reviewRideBottomSheet(context, distance, dropOffTime)),
+              ),
+            ),
           ],
         ),
       ),
